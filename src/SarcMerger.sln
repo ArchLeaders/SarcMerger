@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SarcMerger", "SarcMerger\Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SarcMerger.Core", "SarcMerger.Core\SarcMerger.Core.csproj", "{F53D711C-8470-4573-849C-282013AFFDF4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{B1DBDD62-7610-47C4-AA3B-4873F5B111AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SarcMergerTools", "..\tools\SarcMergerTools\SarcMergerTools.csproj", "{D6F3E8D7-3ADC-4373-8AE6-33754FB0B781}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,12 @@ Global
 		{F53D711C-8470-4573-849C-282013AFFDF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F53D711C-8470-4573-849C-282013AFFDF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F53D711C-8470-4573-849C-282013AFFDF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6F3E8D7-3ADC-4373-8AE6-33754FB0B781}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6F3E8D7-3ADC-4373-8AE6-33754FB0B781}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6F3E8D7-3ADC-4373-8AE6-33754FB0B781}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6F3E8D7-3ADC-4373-8AE6-33754FB0B781}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D6F3E8D7-3ADC-4373-8AE6-33754FB0B781} = {B1DBDD62-7610-47C4-AA3B-4873F5B111AD}
 	EndGlobalSection
 EndGlobal
