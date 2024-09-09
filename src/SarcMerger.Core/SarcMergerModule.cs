@@ -46,11 +46,11 @@ public class SarcMergerModule(TotkChecksums checksums)
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void ProcessSarc(string file, ReadOnlySpan<char> canonical, string outputFolder, RomfsFileAttributes attributes)
+    private void ProcessSarc(string file, ReadOnlySpan<char> canonical, string outputFolder,
+        RomfsFileAttributes attributes)
     {
         if (!LocationHelper.IsVanillaFile(canonical, attributes, out string path)) {
-            string outputFile = LocationHelper.GetVersionedOutput(outputFolder, canonical, attributes);
-            File.Copy(file, outputFile, true);
+            CopyContent(file, outputFolder, canonical, attributes);
             return;
         }
 
@@ -58,21 +58,23 @@ public class SarcMergerModule(TotkChecksums checksums)
         using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, attributes, out Stream output);
 
         _sarcChangelogBuilder.WriteToStream(output, inputData.Segment, vanillaData.Segment, canonical);
+        output.Dispose();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void ProcessByml(string file, ReadOnlySpan<char> canonical, string outputFolder, RomfsFileAttributes attributes)
+    private static void ProcessByml(string file, ReadOnlySpan<char> canonical, string outputFolder,
+        RomfsFileAttributes attributes)
     {
         if (!LocationHelper.IsVanillaFile(canonical, attributes, out string path)) {
-            string outputFile = LocationHelper.GetVersionedOutput(outputFolder, canonical, attributes);
-            File.Copy(file, outputFile, true);
+            CopyContent(file, outputFolder, canonical, attributes);
             return;
         }
 
         using ArraySegmentOwner<byte> vanillaData = LocationHelper.GetVanilla(path, out _);
         using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, attributes, out Stream output);
 
-        Byml changelogByml = BymlChangelogBuilder.LogChanges(inputData.Segment, vanillaData.Segment, out Endianness endianness, out ushort version);
+        Byml changelogByml = BymlChangelogBuilder.LogChanges(inputData.Segment, vanillaData.Segment,
+            out Endianness endianness, out ushort version);
 
         // Writing into memory is faster
         // than writing to disk directly
@@ -81,18 +83,26 @@ public class SarcMergerModule(TotkChecksums checksums)
 
         ms.Seek(0, SeekOrigin.Begin);
         ms.CopyTo(output);
+        output.Dispose();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static ArraySegmentOwner<byte> GetIo(string inputFile, ReadOnlySpan<char> canonical, string outputFolder, RomfsFileAttributes attributes, out Stream output)
+    private static ArraySegmentOwner<byte> GetIo(string inputFile, ReadOnlySpan<char> canonical, string outputFolder,
+        RomfsFileAttributes attributes, out Stream output)
     {
         string canonicalManaged = canonical.ToString();
-        output = File.Create(
-            Path.Combine(
-                outputFolder,
-                Totk.AddressTable?.TryGetValue(canonicalManaged, out string? versionedFilePath) is true ? versionedFilePath : canonicalManaged
-            )
+        string outputFile = Path.Combine(
+            outputFolder,
+            Totk.AddressTable?.TryGetValue(canonicalManaged, out string? versionedFilePath) is true
+                ? versionedFilePath
+                : canonicalManaged
         );
+
+        if (Path.GetDirectoryName(outputFile) is string folder) {
+            Directory.CreateDirectory(folder);
+        }
+
+        output = File.Create(outputFile);
 
         using Stream fs = File.OpenRead(inputFile);
         int size = Convert.ToInt32(fs.Length);
@@ -108,6 +118,17 @@ public class SarcMergerModule(TotkChecksums checksums)
         Totk.Zstd.Decompress(input.Segment, decompressedInput.Segment);
         input.Dispose();
         return decompressedInput;
+    }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void CopyContent(string inputFile, string outputFolder, ReadOnlySpan<char> canonical,
+        RomfsFileAttributes attributes)
+    {
+        string outputFile = LocationHelper.GetVersionedOutput(outputFolder, canonical, attributes);
+        if (Path.GetDirectoryName(outputFile) is string folder) {
+            Directory.CreateDirectory(folder);
+        }
+
+        File.Copy(inputFile, outputFile, true);
     }
 }
