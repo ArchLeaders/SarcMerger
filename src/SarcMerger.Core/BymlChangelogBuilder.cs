@@ -1,6 +1,7 @@
 using BymlLibrary;
 using BymlLibrary.Nodes.Containers;
 using Revrs;
+using SarcMerger.Core.Helpers;
 
 namespace SarcMerger.Core;
 
@@ -41,27 +42,47 @@ public static class BymlChangelogBuilder
         };
     }
 
-    private static bool LogArrayChanges(ref Byml root, BymlArray src, BymlArray vanilla)
+    public static bool LogArrayChanges(ref Byml root, BymlArray src, BymlArray vanilla)
     {
-        (bool isVanillaSmaller, BymlArray larger, BymlArray smaller) = (vanilla.Count < src.Count)
-            ? (true, src, vanilla)
-            : (false, vanilla, src);
-
         BymlArrayChangelog changelog = [];
+        List<int> editedVanillaIndices = [];
 
-        int i = 0;
-
-        for (; i < smaller.Count; i++) {
-            Byml srcEntry = src[i];
-            if (!LogChangesInline(ref srcEntry, vanilla[i])) {
-                changelog[i] = (BymlChangeType.Edit, srcEntry);
+        for (int i = 0; i < src.Count; i++) {
+            Byml element = src[i];
+            if (!vanilla.TryGetIndex(element, Byml.ValueEqualityComparer.Default, out int vanillaIndex)) {
+                continue;
             }
+
+            src[i] = BymlChangeType.Remove;
+            vanilla[vanillaIndex] = BymlChangeType.Remove;
         }
 
-        for (; i < larger.Count; i++) {
-            changelog[i] = isVanillaSmaller
-                ? (BymlChangeType.Add, src[i])
-                : (BymlChangeType.Remove, new());
+        for (int i = 0; i < vanilla.Count; i++) {
+            if (vanilla[i].Type is BymlNodeType.Changelog) {
+                continue;
+            }
+
+            if (i < src.Count) {
+                editedVanillaIndices.Add(i);
+                continue;
+            }
+
+            changelog.Add(i, (BymlChangeType.Remove, new()));
+        }
+
+        for (int i = 0; i < src.Count; i++) {
+            Byml element = src[i];
+            if (element.Type is BymlNodeType.Changelog) {
+                continue;
+            }
+
+            if (editedVanillaIndices.Count > 0) {
+                changelog.Add(editedVanillaIndices[0], (BymlChangeType.Edit, element));
+                editedVanillaIndices.RemoveAt(0);
+                continue;
+            }
+
+            changelog.Add(i, (BymlChangeType.Add, element));
         }
 
         root = changelog;
