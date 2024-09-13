@@ -55,7 +55,7 @@ public class SarcMergerModule(TotkChecksums checksums)
         }
 
         using ArraySegmentOwner<byte> vanillaData = LocationHelper.GetVanilla(path, out _);
-        using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, attributes, out Stream output);
+        using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, out Stream output);
 
         _sarcChangelogBuilder.WriteToStream(output, inputData.Segment, vanillaData.Segment, canonical);
         output.Dispose();
@@ -71,7 +71,7 @@ public class SarcMergerModule(TotkChecksums checksums)
         }
 
         using ArraySegmentOwner<byte> vanillaData = LocationHelper.GetVanilla(path, out _);
-        using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, attributes, out Stream output);
+        using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, out Stream output);
 
         Byml changelogByml = BymlChangelogBuilder.LogChanges(inputData.Segment, vanillaData.Segment,
             out Endianness endianness, out ushort version);
@@ -88,7 +88,7 @@ public class SarcMergerModule(TotkChecksums checksums)
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ArraySegmentOwner<byte> GetIo(string inputFile, ReadOnlySpan<char> canonical, string outputFolder,
-        RomfsFileAttributes attributes, out Stream output)
+        out Stream output)
     {
         string canonicalManaged = canonical.ToString();
         string outputFile = Path.Combine(
