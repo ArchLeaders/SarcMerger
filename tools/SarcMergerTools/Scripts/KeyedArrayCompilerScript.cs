@@ -20,9 +20,6 @@ public class KeyedArrayCompilerScript
         ["binary"] = BymlNodeType.Binary,
     }.ToFrozenDictionary();
     
-    private readonly HashSet<string> _keyPool = [];
-    private readonly HashSet<string> _stringPool = [];
-
     private readonly Dictionary<string, Dictionary<string, (BymlNodeType, string)>> _typeUniqueEntries = [];
     private readonly Dictionary<string, (BymlNodeType, string)> _entries = [];
 
