@@ -25,8 +25,9 @@ public static class BymlChangelogBuilder
             BymlNodeType.HashMap32 => LogMapChanges(type, src.GetHashMap32(), vanilla.GetHashMap32()),
             BymlNodeType.HashMap64 => LogMapChanges(type, src.GetHashMap64(), vanilla.GetHashMap64()),
             BymlNodeType.Array => type switch {
-                "ecocat" => EcocatChangelogBuilder.LogChanges(ref src, src.GetArray(), vanilla.GetArray()),
-                _ => DefaultArrayChangelogBuilder.Instance.LogArrayChanges(type, ref src, src.GetArray(), vanilla.GetArray())
+                "ecocat" => new KeyedArrayChangelogBuilder<string>("AreaNumber")
+                    .LogChanges([], ref src, src.GetArray(), vanilla.GetArray()),
+                _ => DefaultArrayChangelogBuilder.Instance.LogChanges(type, ref src, src.GetArray(), vanilla.GetArray())
             },
             BymlNodeType.Map => LogMapChanges(type, src.GetMap(), vanilla.GetMap()),
             BymlNodeType.String or
@@ -60,7 +61,7 @@ public static class BymlChangelogBuilder
             if (key is string keyStr && srcValue.Value is BymlArray array && vanillaNode.Value is BymlArray vanillaArray) {
                 BymlArrayChangelogBuilderProvider
                     .GetChangelogBuilder(type, keyStr)
-                    .LogArrayChanges(type, ref srcValue, array, vanillaArray);
+                    .LogChanges(type, ref srcValue, array, vanillaArray);
                 goto Default;
             }
             

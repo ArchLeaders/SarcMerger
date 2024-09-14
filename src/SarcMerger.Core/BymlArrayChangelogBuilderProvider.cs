@@ -12,6 +12,10 @@ public static class BymlArrayChangelogBuilderProvider
     public static IArrayChangelogBuilder GetChangelogBuilder(ReadOnlySpan<char> type, ReadOnlySpan<char> key)
     {
         return key switch {
+            "Enemy" or "FallFloorInsect" or "Fish" or "GrassCut" or "Insect" or "NotDecayedLargeSwordList"
+                or "NotDecayedSmallSwordList" or "NotDecayedSpearList" or "RainBonusMaterial" or "Seafood"
+                or "SpObjCapsuleBlockMaster" or "Weapon" or "bow" or "shields" or "weapons"
+                or "helmets" => new KeyedArrayChangelogBuilder<ulong>("name"),  
             "Actors" => type switch {
                 "bcett" => new KeyedArrayChangelogBuilder<ulong>("Hash"),
                 "game__component__ArmyManagerParam" => new KeyedArrayChangelogBuilder<string>("ActorName"),
