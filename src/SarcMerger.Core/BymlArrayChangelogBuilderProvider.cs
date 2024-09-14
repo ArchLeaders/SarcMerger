@@ -106,7 +106,6 @@ public static class BymlArrayChangelogBuilderProvider
             "PartialList" => new KeyedArrayChangelogBuilder<string>("GameData"),
             "PlacementGroups" => new KeyedArrayChangelogBuilder<int>("GroupID"),
             "EffectLimiterGroup" or "HiddenMaterialGroupList" => new KeyedArrayChangelogBuilder<string>("GroupName"),
-            "Node" => new KeyedArrayChangelogBuilder<byte[]>("GUID"),
             "Textures" => new KeyedArrayChangelogBuilder<uint>("guid"),
             "AiGroups" or "Points" or "Rails" => new KeyedArrayChangelogBuilder<ulong>("Hash"),
             "HeadshotDamageParameters" => new KeyedArrayChangelogBuilder<string>("HeadshotBoneName"),
@@ -140,7 +139,8 @@ public static class BymlArrayChangelogBuilderProvider
                 or "LookingControllerNamePathAry" or "MatterRigidBodyNamePathAry" or "MeshList" or "ParamTable"
                 or "RagdollReaction" or "RagdollReactionList" or "RagdollStructure" or "Reaction"
                 or "RigidBodyEntityNamePathAry" or "RigidBodySensorNamePathAry" or "ShapeList" or "ShapeNamePathAry"
-                or "StringData" or "TailBoneControllerNamePathAry" => new KeyedArrayChangelogBuilder<string>("Name"),
+                or "StringData" or "TailBoneControllerNamePathAry"
+                or "Node" => new KeyedArrayChangelogBuilder<string>("Name"),
             "Property" or "TowingHookParams" => new KeyedArrayChangelogBuilder<uint>("NameHash"),
             "ExtraNewsSourceInfo" or "TopNewsSourceInfo" => new KeyedArrayChangelogBuilder<string>("NewsKeyName"),
             "PictureBookPackInfoArray" => new KeyedArrayChangelogBuilder<string>("PackActor"),
