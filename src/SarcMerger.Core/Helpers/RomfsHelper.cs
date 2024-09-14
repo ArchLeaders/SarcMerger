@@ -54,6 +54,5 @@ public static class LocationHelper
         Totk.Zstd.Decompress(buffer.Segment, decompressedBuffer.Segment);
         buffer.Dispose();
         return decompressedBuffer;
-
     }
 }
