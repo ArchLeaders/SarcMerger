@@ -15,3 +15,15 @@
 
 #endregion
 
+using System.Buffers;
+using System.Reflection;
+using SarcMergerTools.Scripts;
+
+using Stream ymlStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SarcMergerTools.Data.KeyedArrays.yml")!;
+int size = (int)ymlStream.Length;
+byte[] buffer = ArrayPool<byte>.Shared.Rent(size);
+_ = ymlStream.Read(buffer.AsSpan()[..size]);
+KeyedArrayCompilerScript compiler = new(new ReadOnlySequence<byte>(buffer, 0, size));
+
+using FileStream fs = File.Create(@"D:\bin\Bgyml\KeyedArrays.bin");
+compiler.Compile(fs);

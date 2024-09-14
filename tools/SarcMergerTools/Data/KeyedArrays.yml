@@ -5,29 +5,29 @@ EffectLimiterGroup: !string GroupName
 VisibleSageOnNonMember: !string SageType
 GlobalResidentEventList: !string EventName
 CaveParams: !ul CaveInstanceId
-game__colorvariation__ConversionActorNameToParasailPatternSetTable / Table: !string ParasailPattern
+game__colorvariation__ConversionActorNameToParasailPatternSetTable/Table: !string ParasailPattern
 Rewards: !string ActorName
 RequirementList: !string ActorName
 FallenActorTable: !string DropActorName
-game__ui__LargeDungeonFloorDefaultSettingTable / SettingTable: !string RelatedCahllenge
+game__ui__LargeDungeonFloorDefaultSettingTable/SettingTable: !string RelatedCahllenge
 Settings: !string Actor
 SuspiciosBuffs: !string SuspiciousBuffType
-game__ui__FairyFountainGlobalSetting / Contents: !string Actor
+game__ui__FairyFountainGlobalSetting/Contents: !string Actor
 ManeNamePairs: !string ManeActorName
 SeriesArmorEffectList: !string SeriesName
-SharpInfoBowList: !ul ActorNameHash
+SharpInfoBowList: !u ActorNameHash
 SmallDungeonLocationList: !string DungeonIndexStr
 ModelVariationAnims: !string Fmab
 HingeArray: !string ConstraintName
-phive__LookIKResourceHeaderParam / BoneInfoArray: !string BoneName
+phive__LookIKResourceHeaderParam/BoneInfoArray: !string BoneName
 MeshList: !string Name
 CollidableList: !string Name
-OverwritePropertiesSound: !ul TargetTypeNameHash
-ShootableActorSettings: !ul KeyHash
+OverwritePropertiesSound: !u TargetTypeNameHash
+ShootableActorSettings: !u KeyHash
 ShapeList: !string Name
 RegisteredActorArray: !string ActorName
-VariationListForArmorDye: !string ?DyeColor
-game__pouchcontent__EnhancementMaterial / Items: !string Actor
+VariationListForArmorDye: !string DyeColor
+game__pouchcontent__EnhancementMaterial/Items: !string Actor
 HiddenMaterialGroupList: !string GroupName
 WeakPointActorArray: !string ActorPath
 ControllerSensorUnitAry: !string Name
@@ -38,14 +38,14 @@ StickWeaponBone: !string BoneName
 ActionVerbContainerElements: !string ActionVerb
 HackEquip: !string EquipUserBbKey
 Anchors: !string AnchorName
-game__component__ArmyManagerParam / Actors: !string ActorName
+game__component__ArmyManagerParam/Actors: !string ActorName
 HandTwoBoneIKSolverParam: static
 PickConditions: !u DefineNameHash
 ModelBindSettings: !string BoneName
-game__component__DragonParam / BoneInfoArray: !u Hash
+game__component__DragonParam/BoneInfoArray: !u Hash
 BoneList: !string BoneName
-phive__TailBoneResourceHeaderParam / BoneInfoArray: !string BoneName
-game__enemy__DrakeSubModelInfo / Elements: !string BoneName
+phive__TailBoneResourceHeaderParam/BoneInfoArray: !string BoneName
+game__enemy__DrakeSubModelInfo/Elements: !string BoneName
 ConditionArray: !string Key
 FruitOffsetTranslation: !string BoneName
 GoodsList: !string ActorName
@@ -63,18 +63,17 @@ CropYieldTable: !string CropName
 BindBoneList: !string BoneName
 EventEntry: !string EventName
 Categories: !string CallbackName
-game__ecosystem__DecayedWeaponMappingTable / Table: !u EquipmentDeathCountGmdHash
+game__ecosystem__DecayedWeaponMappingTable/Table: !u EquipmentDeathCountGmdHash
 ConditionList: !string WeaponEssence
 DungeonBossDifficultyGameData: !u DefeatedNumGameDataHash
 AttachmentGroupList: !string Label
 EnemyGroupList: !string Label
-PointDefineList: !map LevelSensorGameDataElement
 ShopWeaponGroupList: !string Label
 WeaponGroupList: !string Label
-game__gamebalance__LevelSensorTargetDefine / Elements: !u ActorNameHash
+game__gamebalance__LevelSensorTargetDefine/Elements: !u ActorNameHash
 TriggerParams: !string Key
 PropertyDefinitions: !u PropertyNameHash
-game__sound__ShrineSpotBgmTypeInfoList / List: !string DungeonIndexStr
+game__sound__ShrineSpotBgmTypeInfoList/List: !string DungeonIndexStr
 CollectItem: !string Name
 CustomCullInfos: !string ResourceName
 SpecialCullInfos: !string ResourceName
@@ -87,8 +86,8 @@ TipsSetArray: !string TipsType
 PictureBookPackInfoArray: !string PackActor
 BoostOnlyTable: !string Target
 BGParamArray: !string TexName
-game__banc__OutputPlacemarkParamList / List: static
-bcett / Actors: !ul Hash
+game__banc__OutputPlacemarkParamList/List: static
+bcett/Actors: !ul Hash
 Dungeon: !string LocationName
 Shrine: !string LocationName
 SpotMiddle: !string LocationName
@@ -107,17 +106,17 @@ UserShapeTagMaskCollection: !string ComponentName
 PartialList: !string GameData
 AdventureMemorySetArray: !string EventName
 OverwriteParam: !ul InstanceId
-alto__ShapeParamList / ShapeList: !string Name
+alto__ShapeParamList/ShapeList: !string Name
 DragonInfoList: !u BindPointRespawnGameDataHash
 ResidentActors: !string Actor
-FootTwoBoneIKSolverParam: !static
+FootTwoBoneIKSolverParam: static
 Interests: !string InterestType
 StrongInterests: !string InterestType
 AttackParams: !string AttackType
 PictureBookParamArray: !string ActorNameShort
 ActionSeqs: !u LabelHash
 HornTypeAndAttachmentMapping: !string AttachmentName
-FootParamList: !static
+FootParamList: static
 NavMeshObjects: !string Alias
 Object: !string ChemicalMaterial
 BlackboardParamBoolArray: !string BBKey
@@ -135,7 +134,6 @@ RigidBodyEntityNamePathAry: !string Name
 RigidBodySensorNamePathAry: !string Name
 ShapeNamePathAry: !string Name
 Seats: !string RidableType
-DamageBlackList: !array AttackIdentifierHash
 HeadshotDamageParameters: !string HeadshotBoneName
 LookIKControllerNamePathAry: !string Name
 MatterRigidBodyNamePathAry: !string Name
@@ -229,5 +227,5 @@ Stable: !string LocationName
 Tower: !string LocationName
 Underground: !string LocationName
 Node: !binary GUID
-Property: !u NameHash # Can also be !int
+Property: !u NameHash
 TransitionParam: !int Index
