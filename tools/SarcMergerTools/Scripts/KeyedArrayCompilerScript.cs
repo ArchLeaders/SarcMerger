@@ -12,7 +12,7 @@ namespace SarcMergerTools.Scripts;
 
 public class KeyedArrayCompilerScript
 {
-    private static readonly FrozenDictionary<string, BymlNodeType> _typeNameToNodeType = new Dictionary<string, BymlNodeType>() {
+    private static readonly FrozenDictionary<string, BymlNodeType> TypeNameToNodeType = new Dictionary<string, BymlNodeType>() {
         ["string"] = BymlNodeType.String,
         ["u"] = BymlNodeType.UInt32,
         ["ul"] = BymlNodeType.UInt64,
@@ -86,7 +86,7 @@ public class KeyedArrayCompilerScript
         int keyStartIndex;
         
         if ((keyStartIndex = arrayKey.IndexOf('/')) == -1) {
-            _entries[arrayKey] = (_typeNameToNodeType[typeName], key);
+            _entries[arrayKey] = (TypeNameToNodeType[typeName], key);
             return;
         }
         
@@ -96,7 +96,7 @@ public class KeyedArrayCompilerScript
             _typeUniqueEntries[classType] = entries = [];
         }
         
-        entries[arrayKey] = (_typeNameToNodeType[typeName], key);
+        entries[arrayKey] = (TypeNameToNodeType[typeName], key);
     }
 
     private void SetupStringPools(out List<string> keyPool, out Dictionary<string, int> keyPoolLookup, out List<string> stringPool, out Dictionary<string, byte> stringPoolLookup)
