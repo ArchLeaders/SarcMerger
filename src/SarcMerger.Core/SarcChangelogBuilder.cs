@@ -39,7 +39,10 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
             }
 
             if (DataHelper.IsBymlFile(data)) {
-                Byml changelogByml = BymlChangelogBuilder.LogChanges(data, vanillaData, out Endianness endianness, out ushort version);
+                Byml changelogByml = BymlChangelogBuilder.LogChanges(
+                    RomfsHelper.GetBymlType(name), data, vanillaData,
+                    out Endianness endianness, out ushort version
+                );
 
                 using MemoryStream ms = new();
                 changelogByml.WriteBinary(ms, endianness, version);

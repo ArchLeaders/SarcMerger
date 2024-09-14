@@ -1,10 +1,11 @@
+using System.Buffers;
 using Revrs.Buffers;
 using TotkCommon;
 using TotkCommon.Extensions;
 
 namespace SarcMerger.Core.Helpers;
 
-public static class LocationHelper
+public static class RomfsHelper
 {
     public static string GetVersionedOutput(string outputRomfs, ReadOnlySpan<char> canonical, RomfsFileAttributes attributes)
     {
@@ -54,5 +55,20 @@ public static class LocationHelper
         Totk.Zstd.Decompress(buffer.Segment, decompressedBuffer.Segment);
         buffer.Dispose();
         return decompressedBuffer;
+    }
+
+    public static ReadOnlySpan<char> GetBymlType(ReadOnlySpan<char> canonical)
+    {
+        ReadOnlySpan<char> ext = Path.GetExtension(canonical);
+        return GetBymlType(canonical, ext);
+    }
+
+    public static ReadOnlySpan<char> GetBymlType(ReadOnlySpan<char> canonical, ReadOnlySpan<char> ext)
+    {
+        ReadOnlySpan<char> result;
+        return (result = canonical[..^ext.Length]).Length switch {
+            <= 0 => result,
+            >= 1 => result[1..] 
+        };
     }
 }

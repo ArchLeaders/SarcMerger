@@ -39,8 +39,8 @@ public class SarcMergerModule(TotkChecksums checksums)
             case ".bfarc" or ".bkres" or ".blarc" or ".genvb" or ".pack" or ".ta":
                 ProcessSarc(inputFile, canonical, outputFolder, attributes);
                 return;
-            case ".byml" or ".bgyml" when canonical.Length > 4 && canonical[0..4] is not "RSDB":
-                ProcessByml(inputFile, canonical, outputFolder, attributes);
+            case ".byml" or ".bgyml" when canonical.Length > 4 && canonical[..4] is not "RSDB":
+                ProcessByml(inputFile, canonical, ext, outputFolder, attributes);
                 break;
         }
     }
@@ -49,12 +49,12 @@ public class SarcMergerModule(TotkChecksums checksums)
     private void ProcessSarc(string file, ReadOnlySpan<char> canonical, string outputFolder,
         RomfsFileAttributes attributes)
     {
-        if (!LocationHelper.IsVanillaFile(canonical, attributes, out string path)) {
+        if (!RomfsHelper.IsVanillaFile(canonical, attributes, out string path)) {
             CopyContent(file, outputFolder, canonical, attributes);
             return;
         }
 
-        using ArraySegmentOwner<byte> vanillaData = LocationHelper.GetVanilla(path, out _);
+        using ArraySegmentOwner<byte> vanillaData = RomfsHelper.GetVanilla(path, out _);
         using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, out Stream output);
 
         _sarcChangelogBuilder.WriteToStream(output, inputData.Segment, vanillaData.Segment, canonical);
@@ -62,15 +62,15 @@ public class SarcMergerModule(TotkChecksums checksums)
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void ProcessByml(string file, ReadOnlySpan<char> canonical, string outputFolder,
-        RomfsFileAttributes attributes)
+    private static void ProcessByml(string file, ReadOnlySpan<char> canonical, ReadOnlySpan<char> ext,
+        string outputFolder, RomfsFileAttributes attributes)
     {
-        if (!LocationHelper.IsVanillaFile(canonical, attributes, out string path)) {
+        if (!RomfsHelper.IsVanillaFile(canonical, attributes, out string path)) {
             CopyContent(file, outputFolder, canonical, attributes);
             return;
         }
 
-        using ArraySegmentOwner<byte> vanillaData = LocationHelper.GetVanilla(path, out _);
+        using ArraySegmentOwner<byte> vanillaData = RomfsHelper.GetVanilla(path, out _);
         using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, out Stream output);
 
         Byml changelogByml = BymlChangelogBuilder.LogChanges(inputData.Segment, vanillaData.Segment,
@@ -124,7 +124,7 @@ public class SarcMergerModule(TotkChecksums checksums)
     private static void CopyContent(string inputFile, string outputFolder, ReadOnlySpan<char> canonical,
         RomfsFileAttributes attributes)
     {
-        string outputFile = LocationHelper.GetVersionedOutput(outputFolder, canonical, attributes);
+        string outputFile = RomfsHelper.GetVersionedOutput(outputFolder, canonical, attributes);
         if (Path.GetDirectoryName(outputFile) is string folder) {
             Directory.CreateDirectory(folder);
         }

@@ -2,7 +2,7 @@ using BymlLibrary;
 using BymlLibrary.Nodes.Containers;
 using SarcMerger.Core.Helpers;
 
-namespace SarcMerger.Core.ArrayChangelogBuilders;
+namespace SarcMerger.Core.ChangelogBuilders;
 
 public class DefaultArrayChangelogBuilder : IArrayChangelogBuilder
 {
