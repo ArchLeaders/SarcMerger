@@ -5,5 +5,5 @@ namespace SarcMerger.Core;
 
 public interface IArrayChangelogBuilder
 {
-    bool LogArrayChanges(ReadOnlySpan<char> type, ref Byml root, BymlArray src, BymlArray vanilla);
+    bool LogChanges(ReadOnlySpan<char> type, ref Byml root, BymlArray src, BymlArray vanilla);
 }

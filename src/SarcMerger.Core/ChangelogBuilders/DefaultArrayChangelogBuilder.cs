@@ -8,7 +8,7 @@ public class DefaultArrayChangelogBuilder : IArrayChangelogBuilder
 {
     public static readonly DefaultArrayChangelogBuilder Instance = new();
     
-    public bool LogArrayChanges(ReadOnlySpan<char> type, ref Byml root, BymlArray src, BymlArray vanilla)
+    public bool LogChanges(ReadOnlySpan<char> type, ref Byml root, BymlArray src, BymlArray vanilla)
     {
         BymlArrayChangelog changelog = [];
         List<int> editedVanillaIndices = [];

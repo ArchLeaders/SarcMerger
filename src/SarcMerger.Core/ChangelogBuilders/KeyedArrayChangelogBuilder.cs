@@ -7,7 +7,7 @@ public class KeyedArrayChangelogBuilder<T>(string key) : IArrayChangelogBuilder 
 {
     private readonly string _key = key;
 
-    public bool LogArrayChanges(ReadOnlySpan<char> type, ref Byml root, BymlArray src, BymlArray vanilla)
+    public bool LogChanges(ReadOnlySpan<char> type, ref Byml root, BymlArray src, BymlArray vanilla)
     {
         BymlArrayChangelog changelog = [];
 
