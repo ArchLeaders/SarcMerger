@@ -1,7 +1,7 @@
 using BymlLibrary;
 using BymlLibrary.Nodes.Containers;
 using Revrs;
-using SarcMerger.Core.Helpers;
+using SarcMerger.Core.ChangelogBuilders;
 
 namespace SarcMerger.Core;
 
@@ -22,10 +22,13 @@ public static class BymlChangelogBuilder
         }
 
         return src.Type switch {
-            BymlNodeType.HashMap32 => LogMapChanges(src.GetHashMap32(), vanilla.GetHashMap32()),
-            BymlNodeType.HashMap64 => LogMapChanges(src.GetHashMap64(), vanilla.GetHashMap64()),
-            BymlNodeType.Array => LogArrayChanges(ref src, src.GetArray(), vanilla.GetArray()),
-            BymlNodeType.Map => LogMapChanges(src.GetMap(), vanilla.GetMap()),
+            BymlNodeType.HashMap32 => LogMapChanges(type, src.GetHashMap32(), vanilla.GetHashMap32()),
+            BymlNodeType.HashMap64 => LogMapChanges(type, src.GetHashMap64(), vanilla.GetHashMap64()),
+            BymlNodeType.Array => type switch {
+                "ecocat" => EcocatChangelogBuilder.LogChanges(ref src, src.GetArray(), vanilla.GetArray()),
+                _ => DefaultArrayChangelogBuilder.Instance.LogArrayChanges(type, ref src, src.GetArray(), vanilla.GetArray())
+            },
+            BymlNodeType.Map => LogMapChanges(type, src.GetMap(), vanilla.GetMap()),
             BymlNodeType.String or
             BymlNodeType.Binary or
             BymlNodeType.BinaryAligned or
@@ -50,11 +53,23 @@ public static class BymlChangelogBuilder
                 continue;
             }
 
-            if (vanilla.TryGetValue(key, out Byml? vanillaNode) && LogChangesInline(ref srcValue, vanillaNode)) {
+            if (!vanilla.TryGetValue(key, out Byml? vanillaNode)) {
+                continue;
+            }
+
+            if (key is string keyStr && srcValue.Value is BymlArray array && vanillaNode.Value is BymlArray vanillaArray) {
+                BymlArrayChangelogBuilderProvider
+                    .GetChangelogBuilder(type, keyStr)
+                    .LogArrayChanges(type, ref srcValue, array, vanillaArray);
+                goto Default;
+            }
+            
+            if (LogChangesInline(type, ref srcValue, vanillaNode)) {
                 src.Remove(key);
                 continue;
             }
 
+        Default:
             // CreateChangelog can mutate
             // srcValue, so reassign the key
             src[key] = srcValue;

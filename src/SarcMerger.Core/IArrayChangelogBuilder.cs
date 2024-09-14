@@ -3,7 +3,7 @@ using BymlLibrary.Nodes.Containers;
 
 namespace SarcMerger.Core;
 
-public interface IBymlArrayChangelogBuilder
+public interface IArrayChangelogBuilder
 {
-    bool LogArrayChanges(ref Byml root, BymlArray src, BymlArray vanilla);
+    bool LogArrayChanges(ReadOnlySpan<char> type, ref Byml root, BymlArray src, BymlArray vanilla);
 }

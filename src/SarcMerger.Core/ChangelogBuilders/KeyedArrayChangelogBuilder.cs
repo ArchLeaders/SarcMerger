@@ -3,7 +3,7 @@ using BymlLibrary.Nodes.Containers;
 
 namespace SarcMerger.Core.ChangelogBuilders;
 
-public class StringKeyArrayChangelogBuilder(string key) : IArrayChangelogBuilder
+public class KeyedArrayChangelogBuilder<T>(string key) : IArrayChangelogBuilder where T : notnull
 {
     private readonly string _key = key;
 
