@@ -39,7 +39,7 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
 
         switch (ext) {
             case ".bfarc" or ".bkres" or ".blarc" or ".genvb" or ".pack" or ".ta":
-                ProcessSarc(inputFile, canonical, outputFolder, attributes);
+                ProcessSarc(inputFile, canonical, outputFolder, ext, attributes);
                 return;
             case ".byml" or ".bgyml" when canonical.Length > 4 && canonical[..4] is not "RSDB":
                 ProcessByml(inputFile, canonical, ext, outputFolder, attributes);
@@ -49,7 +49,7 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ProcessSarc(string file, ReadOnlySpan<char> canonical, string outputFolder,
-        RomfsFileAttributes attributes)
+        ReadOnlySpan<char> ext, RomfsFileAttributes attributes)
     {
         if (!RomfsHelper.IsVanillaFile(canonical, attributes, out string path)) {
             CopyContent(file, outputFolder, canonical, attributes);
@@ -59,7 +59,7 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
         using ArraySegmentOwner<byte> vanillaData = RomfsHelper.GetVanilla(path, out _);
         using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, out Stream output);
 
-        WriteToStream(output, inputData.Segment, vanillaData.Segment, canonical);
+        WriteToStream(output, inputData.Segment, vanillaData.Segment, canonical, ext);
         output.Dispose();
     }
 
@@ -136,7 +136,8 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
         File.Copy(inputFile, outputFile, true);
     }
 
-    private void WriteToStream(Stream output, ArraySegment<byte> input, ArraySegment<byte> vanillaBuffer, ReadOnlySpan<char> canonical)
+    private void WriteToStream(Stream output, ArraySegment<byte> input, ArraySegment<byte> vanillaBuffer,
+        ReadOnlySpan<char> canonical, ReadOnlySpan<char> ext)
     {
         Sarc vanilla = Sarc.FromBinary(vanillaBuffer);
 
@@ -149,8 +150,10 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
                 goto MoveContent;
             }
 
-            // TODO: Check non-pack files (include sarc canonical path)
-            if (_checksums.IsFileVanilla(name, data, Totk.Config.Version)) {
+            if (_checksums.IsFileVanilla(ext switch {
+                    ".pack" => name,
+                    _ => $"{canonical}/{name}"
+                }, data, Totk.Config.Version)) {
                 // Vanilla file, ignore
                 continue;
             }
