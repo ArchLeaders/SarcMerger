@@ -10,7 +10,7 @@ namespace SarcMerger.Core;
 
 public static class BymlArrayChangelogBuilderProvider
 {
-    public static IArrayChangelogBuilder GetChangelogBuilder(ref BymlChangeInfo info, ReadOnlySpan<char> key)
+    public static IArrayChangelogBuilder GetChangelogBuilder(ref BymlTrackingInfo info, ReadOnlySpan<char> key)
     {
         return key switch {
             "Enemy" or "FallFloorInsect" or "Fish" or "GrassCut" or "Insect" or "NotDecayedLargeSwordList"

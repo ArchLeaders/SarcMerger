@@ -1,4 +1,5 @@
-﻿
+﻿using SarcMergerTools.Scripts;
+
 #region Notes
 
 // TravelerInfo needs a custom merger
@@ -11,12 +12,6 @@
 // DropTableElement: !string DropActorName # Needs 100% merger
 // LotteryTableElement: !string DropActorName # Needs 100% merger
 
-// ecocat / $root: !int AreaNumber # Custom ecocat merger, all arrays are keyed by "name"
-
 #endregion
-
-using System.Buffers;
-using System.Reflection;
-using SarcMergerTools.Scripts;
 
 await TestArrayKeysScript.Execute();

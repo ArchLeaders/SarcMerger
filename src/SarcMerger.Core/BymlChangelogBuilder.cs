@@ -8,7 +8,7 @@ namespace SarcMerger.Core;
 
 public static class BymlChangelogBuilder
 {   
-    public static Byml LogChanges(ref BymlChangeInfo info, Span<byte> data, Span<byte> vanillaData, out Endianness endianness, out ushort version)
+    public static Byml LogChanges(ref BymlTrackingInfo info, Span<byte> data, Span<byte> vanillaData, out Endianness endianness, out ushort version)
     {
         Byml vanillaByml = Byml.FromBinary(vanillaData);
         Byml srcByml = Byml.FromBinary(data, out endianness, out version);
@@ -16,7 +16,7 @@ public static class BymlChangelogBuilder
         return srcByml;
     }
 
-    internal static bool LogChangesInline(ref BymlChangeInfo info, ref Byml src, Byml vanilla)
+    internal static bool LogChangesInline(ref BymlTrackingInfo info, ref Byml src, Byml vanilla)
     {
         if (src.Type != vanilla.Type) {
             return false;
@@ -47,7 +47,7 @@ public static class BymlChangelogBuilder
         };
     }
 
-    private static bool LogMapChanges<T>(ref BymlChangeInfo info, IDictionary<T, Byml> src, IDictionary<T, Byml> vanilla)
+    private static bool LogMapChanges<T>(ref BymlTrackingInfo info, IDictionary<T, Byml> src, IDictionary<T, Byml> vanilla)
     {
         info.Level++;
         foreach (T key in src.Keys.Concat(vanilla.Keys).Distinct().ToArray()) { // TODO: Avoid copying keys

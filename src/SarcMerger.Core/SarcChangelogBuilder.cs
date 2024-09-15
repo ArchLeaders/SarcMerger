@@ -75,7 +75,7 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
         using ArraySegmentOwner<byte> vanillaData = RomfsHelper.GetVanilla(path, out _);
         using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, out Stream output);
 
-        BymlChangeInfo info = RomfsHelper.GetBymlType(canonical, ext);
+        BymlTrackingInfo info = RomfsHelper.GetBymlType(canonical, ext);
 
         Byml changelogByml = BymlChangelogBuilder.LogChanges(ref info, inputData.Segment, vanillaData.Segment,
             out Endianness endianness, out ushort version);
@@ -156,7 +156,7 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
             }
 
             if (DataHelper.IsBymlFile(data)) {
-                BymlChangeInfo info = RomfsHelper.GetBymlType(name);
+                BymlTrackingInfo info = RomfsHelper.GetBymlType(name);
                 Byml changelogByml = BymlChangelogBuilder.LogChanges(
                     ref info, data, vanillaData,
                     out Endianness endianness, out ushort version
