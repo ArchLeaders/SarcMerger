@@ -1,5 +1,6 @@
 using BymlLibrary;
 using BymlLibrary.Nodes.Containers;
+using SarcMerger.Core.Models;
 
 namespace SarcMerger.Core.ChangelogBuilders;
 
@@ -7,7 +8,7 @@ public class KeyedArrayChangelogBuilder<T>(string key) : IArrayChangelogBuilder 
 {
     private readonly string _key = key;
 
-    public bool LogChanges(ReadOnlySpan<char> type, ref Byml root, BymlArray src, BymlArray vanilla)
+    public bool LogChanges(ref BymlChangeInfo info, ref Byml root, BymlArray src, BymlArray vanilla)
     {
         BymlArrayChangelog changelog = [];
 
@@ -18,7 +19,7 @@ public class KeyedArrayChangelogBuilder<T>(string key) : IArrayChangelogBuilder 
                 continue;
             }
 
-            if (BymlChangelogBuilder.LogChangesInline(type, ref element, vanilla[vanillaIndex])) {
+            if (BymlChangelogBuilder.LogChangesInline(ref info, ref element, vanilla[vanillaIndex])) {
                 src[i] = BymlChangeType.Remove;
                 goto UpdateVanilla;
             }

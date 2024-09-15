@@ -1,6 +1,7 @@
 using BymlLibrary;
 using BymlLibrary.Nodes.Containers;
 using SarcMerger.Core.Helpers;
+using SarcMerger.Core.Models;
 
 namespace SarcMerger.Core.ChangelogBuilders;
 
@@ -8,7 +9,7 @@ public class DefaultArrayChangelogBuilder : IArrayChangelogBuilder
 {
     public static readonly DefaultArrayChangelogBuilder Instance = new();
     
-    public bool LogChanges(ReadOnlySpan<char> type, ref Byml root, BymlArray src, BymlArray vanilla)
+    public bool LogChanges(ref BymlChangeInfo info, ref Byml root, BymlArray src, BymlArray vanilla)
     {
         BymlArrayChangelog changelog = [];
         List<int> editedVanillaIndices = [];
@@ -44,7 +45,7 @@ public class DefaultArrayChangelogBuilder : IArrayChangelogBuilder
 
             if (editedVanillaIndices.Count > 0) {
                 int vanillaIndex = editedVanillaIndices[0];
-                BymlChangelogBuilder.LogChangesInline(type, ref element, vanilla[vanillaIndex]);
+                BymlChangelogBuilder.LogChangesInline(ref info, ref element, vanilla[vanillaIndex]);
                 changelog.Add(vanillaIndex, (BymlChangeType.Edit, element));
                 editedVanillaIndices.RemoveAt(0);
                 continue;

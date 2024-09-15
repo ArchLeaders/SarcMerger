@@ -84,7 +84,7 @@ DungeonBossDifficultyGameData: !u DefeatedNumGameDataHash
 EditBBParams: !string BBKey
 EffectLimiterGroup: !string GroupName
 EnemyGroupList: !string Label
-EventEntry: !string EventName
+EventEntry: !string $type
 ExternalShapeNamePathAry: !string Name
 ExtraNewsSourceInfo: !string NewsKeyName
 FallenActorTable: !string DropActorName
@@ -148,7 +148,7 @@ RagdollStructure: !string Name
 Rails: !ul Hash
 RangeArray: !string ConstraintName
 Reaction: !string Name
-References: !string Id
+References: !ul Reference
 RegisteredActorArray: !string ActorName
 RequirementList: !string ActorName
 ResidentActors: !string Actor

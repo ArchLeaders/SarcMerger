@@ -2,6 +2,7 @@ using BymlLibrary;
 using Revrs;
 using SarcLibrary;
 using SarcMerger.Core.Helpers;
+using SarcMerger.Core.Models;
 using TotkCommon;
 using TotkCommon.Components;
 
@@ -39,8 +40,9 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
             }
 
             if (DataHelper.IsBymlFile(data)) {
+                BymlChangeInfo info = RomfsHelper.GetBymlType(name);
                 Byml changelogByml = BymlChangelogBuilder.LogChanges(
-                    RomfsHelper.GetBymlType(name), data, vanillaData,
+                    ref info, data, vanillaData,
                     out Endianness endianness, out ushort version
                 );
 

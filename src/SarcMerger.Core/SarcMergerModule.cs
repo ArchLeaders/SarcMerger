@@ -3,6 +3,7 @@ using BymlLibrary;
 using Revrs;
 using Revrs.Buffers;
 using SarcMerger.Core.Helpers;
+using SarcMerger.Core.Models;
 using TotkCommon;
 using TotkCommon.Components;
 using TotkCommon.Extensions;
@@ -73,9 +74,9 @@ public class SarcMergerModule(TotkChecksums checksums)
         using ArraySegmentOwner<byte> vanillaData = RomfsHelper.GetVanilla(path, out _);
         using ArraySegmentOwner<byte> inputData = GetIo(file, canonical, outputFolder, out Stream output);
 
-        ReadOnlySpan<char> type = RomfsHelper.GetBymlType(canonical, ext);
+        BymlChangeInfo info = RomfsHelper.GetBymlType(canonical, ext);
 
-        Byml changelogByml = BymlChangelogBuilder.LogChanges(type, inputData.Segment, vanillaData.Segment,
+        Byml changelogByml = BymlChangelogBuilder.LogChanges(ref info, inputData.Segment, vanillaData.Segment,
             out Endianness endianness, out ushort version);
 
         // Writing into memory is faster

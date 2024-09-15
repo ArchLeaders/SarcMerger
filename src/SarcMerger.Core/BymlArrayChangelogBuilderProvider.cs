@@ -1,4 +1,5 @@
 using SarcMerger.Core.ChangelogBuilders;
+using SarcMerger.Core.Models;
 
 namespace SarcMerger.Core;
 
@@ -9,49 +10,49 @@ namespace SarcMerger.Core;
 
 public static class BymlArrayChangelogBuilderProvider
 {
-    public static IArrayChangelogBuilder GetChangelogBuilder(ReadOnlySpan<char> type, ReadOnlySpan<char> key)
+    public static IArrayChangelogBuilder GetChangelogBuilder(ref BymlChangeInfo info, ReadOnlySpan<char> key)
     {
         return key switch {
             "Enemy" or "FallFloorInsect" or "Fish" or "GrassCut" or "Insect" or "NotDecayedLargeSwordList"
                 or "NotDecayedSmallSwordList" or "NotDecayedSpearList" or "RainBonusMaterial" or "Seafood"
                 or "SpObjCapsuleBlockMaster" or "Weapon" or "bow" or "shields" or "weapons"
                 or "helmets" => new KeyedArrayChangelogBuilder<ulong>("name"),  
-            "Actors" => type switch {
+            "Actors" => info.Type switch {
                 "bcett" => new KeyedArrayChangelogBuilder<ulong>("Hash"),
                 "game__component__ArmyManagerParam" => new KeyedArrayChangelogBuilder<string>("ActorName"),
                 _ => DefaultArrayChangelogBuilder.Instance
             },
-            "Table" => type switch {
+            "Table" => info.Type switch {
                 "game__colorvariation__ConversionActorNameToParasailPatternSetTable"
-                    => new KeyedArrayChangelogBuilder<ulong>("ParasailPattern"),
+                    => new KeyedArrayChangelogBuilder<string>("ParasailPattern"),
                 "game__ecosystem__DecayedWeaponMappingTable"
                     => new KeyedArrayChangelogBuilder<uint>("EquipmentDeathCountGmdHash"),
                 _ => DefaultArrayChangelogBuilder.Instance
             },
-            "BoneInfoArray" => type switch {
+            "BoneInfoArray" => info.Type switch {
                 "game__component__DragonParam" => new KeyedArrayChangelogBuilder<uint>("Hash"),
                 "phive__LookIKResourceHeaderParam"
                     or "phive__TailBoneResourceHeaderParam" => new KeyedArrayChangelogBuilder<string>("BoneName"),
                 _ => DefaultArrayChangelogBuilder.Instance
             },
-            "Elements" => type switch {
+            "Elements" => info.Type switch {
                 "game__enemy__DrakeSubModelInfo" => new KeyedArrayChangelogBuilder<string>("BoneName"),
                 "game__gamebalance__LevelSensorTargetDefine" => new KeyedArrayChangelogBuilder<uint>("ActorNameHash"),
                 _ => DefaultArrayChangelogBuilder.Instance
             },
-            "Items" => type switch {
+            "Items" => info.Type switch {
                 "game__pouchcontent__EnhancementMaterial" => new KeyedArrayChangelogBuilder<string>("Actor"),
                 _ => DefaultArrayChangelogBuilder.Instance
             },
-            "List" => type switch {
+            "List" => info.Type switch {
                 "game__sound__ShrineSpotBgmTypeInfoList" => new KeyedArrayChangelogBuilder<string>("DungeonIndexStr"),
                 _ => DefaultArrayChangelogBuilder.Instance
             },
-            "Contents" => type switch {
+            "Contents" => info.Type switch {
                 "game__ui__FairyFountainGlobalSetting" => new KeyedArrayChangelogBuilder<string>("Actor"),
                 _ => DefaultArrayChangelogBuilder.Instance
             },
-            "SettingTable" => type switch {
+            "SettingTable" => info.Type switch {
                 "game__ui__LargeDungeonFloorDefaultSettingTable" => new KeyedArrayChangelogBuilder<string>("DungeonType"),
                 _ => DefaultArrayChangelogBuilder.Instance
             },
@@ -100,7 +101,7 @@ public static class BymlArrayChangelogBuilderProvider
             "SmallDungeonLocationList" => new KeyedArrayChangelogBuilder<string>("DungeonIndexStr"),
             "VariationListForArmorDye" => new KeyedArrayChangelogBuilder<string>("DyeColor"),
             "HackEquip" => new KeyedArrayChangelogBuilder<string>("EquipUserBbKey"),
-            "AdventureMemorySetArray" or "EventEntry"
+            "AdventureMemorySetArray"
                 or "GlobalResidentEventList" => new KeyedArrayChangelogBuilder<string>("EventName"),
             "AutoPlayBoneVisibilities" or "AutoPlayMaterials" => new KeyedArrayChangelogBuilder<string>("FileName"),
             "WinningRateTable" => new KeyedArrayChangelogBuilder<int>("FlintstonesNum"),
@@ -110,9 +111,12 @@ public static class BymlArrayChangelogBuilderProvider
             "PlacementGroups" => new KeyedArrayChangelogBuilder<int>("GroupID"),
             "EffectLimiterGroup" or "HiddenMaterialGroupList" => new KeyedArrayChangelogBuilder<string>("GroupName"),
             "Textures" => new KeyedArrayChangelogBuilder<uint>("guid"),
-            "AiGroups" or "Points" or "Rails" => new KeyedArrayChangelogBuilder<ulong>("Hash"),
+            "AiGroups" or "Points" => new KeyedArrayChangelogBuilder<ulong>("Hash"),
+            "Rails" => info.Level switch {
+                0 => new KeyedArrayChangelogBuilder<ulong>("Hash"),
+                _ => DefaultArrayChangelogBuilder.Instance
+            },
             "HeadshotDamageParameters" => new KeyedArrayChangelogBuilder<string>("HeadshotBoneName"),
-            "References" => new KeyedArrayChangelogBuilder<string>("Id"),
             "TransitionParam" => new KeyedArrayChangelogBuilder<int>("Index"),
             "OverwriteParam" => new KeyedArrayChangelogBuilder<ulong>("InstanceId"),
             "Interests" => new KeyedArrayChangelogBuilder<string>("InterestType"),
@@ -132,8 +136,10 @@ public static class BymlArrayChangelogBuilderProvider
                 or "SpotMiddleMountain" or "SpotMiddleOther" or "SpotMiddleTimber" or "SpotMiddleWater"
                 or "SpotSmallArtifact" or "SpotSmallMagma" or "SpotSmallMountain" or "SpotSmallOther"
                 or "SpotSmallTimber" or "SpotSmallWater" or "Stable" or "Tower"
-                or "Underground" => new KeyedArrayChangelogBuilder<string>("LocationName"),
-            "ManeNamePairs" => new KeyedArrayChangelogBuilder<string>("ManeActorName"),
+                or "Underground" => info.Type switch {
+                    "locationarea" => new KeyedArrayChangelogBuilder<string>("LocationName"),
+                    _ => DefaultArrayChangelogBuilder.Instance
+                },
             "MiasmaAreaParam" => new KeyedArrayChangelogBuilder<string>("MiasmaAreaType"),
             "AnimationDrive" or "CColEntityNamePathAry" or "CColSensorNamePathAry" or "CheckPointSetting" or "Cloth"
                 or "ClothAdvandecOption" or "ClothList" or "ClothReaction" or "CollectItem" or "CollidableList"
@@ -165,7 +171,7 @@ public static class BymlArrayChangelogBuilderProvider
             "BGParamArray" => new KeyedArrayChangelogBuilder<string>("TexName"),
             "TipsSetArray" => new KeyedArrayChangelogBuilder<string>("TipsType"),
             "TmbMesh" => new KeyedArrayChangelogBuilder<string>("TmbMeshPath"),
-            "ActorPositionData" => new KeyedArrayChangelogBuilder<string> ("$type"),
+            "ActorPositionData" or "EventEntry" => new KeyedArrayChangelogBuilder<string> ("$type"),
             "SB" or "T" or "U" => new KeyedArrayChangelogBuilder<string>("Umii"),
             "AlreadyReadInfo" => new KeyedArrayChangelogBuilder<string>("UpdateGameDataFlag"),
             "ConditionList" => new KeyedArrayChangelogBuilder<string>("WeaponEssence"),

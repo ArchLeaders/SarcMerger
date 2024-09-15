@@ -2,6 +2,7 @@ using System.Buffers;
 using System.Collections.Frozen;
 using System.Data;
 using System.IO.Hashing;
+using System.Reflection;
 using System.Text;
 using BymlLibrary;
 using CommunityToolkit.HighPerformance;
@@ -23,9 +24,15 @@ public class KeyedArrayCompilerScript
     private readonly Dictionary<string, Dictionary<string, (BymlNodeType, string)>> _typeUniqueEntries = [];
     private readonly Dictionary<string, (BymlNodeType, string)> _entries = [];
 
-    public KeyedArrayCompilerScript(ReadOnlySequence<byte> src)
+    public KeyedArrayCompilerScript()
     {
-        YamlParser parser = new(src);
+        using Stream ymlStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SarcMergerTools.Data.KeyedArrays.yml")!;
+        int size = (int)ymlStream.Length;
+        byte[] buffer = ArrayPool<byte>.Shared.Rent(size);
+        _ = ymlStream.Read(buffer.AsSpan()[..size]);
+        ArrayPool<byte>.Shared.Return(buffer);
+
+        YamlParser parser = new(new ReadOnlySequence<byte>(buffer, 0, size));
         parser.SkipAfter(ParseEventType.MappingStart);
 
         while (parser.CurrentEventType is not ParseEventType.MappingEnd) {
@@ -39,6 +46,12 @@ public class KeyedArrayCompilerScript
         }
     }
 
+    public void Compile(string output)
+    {
+        using FileStream fs = File.Create(output);
+        Compile(fs);
+    }
+    
     public void Compile(Stream output)
     {
         SetupStringPools(

@@ -15,4 +15,8 @@
     <EmbeddedResource Include="Data\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SarcMerger.Core\SarcMerger.Core.csproj" />
+  </ItemGroup>
+
 </Project>
