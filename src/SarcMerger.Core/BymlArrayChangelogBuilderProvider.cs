@@ -58,9 +58,8 @@ public static class BymlArrayChangelogBuilderProvider
             "BrainVerbs" => new KeyedArrayChangelogBuilder<string>("ActionSeqContainer"),
             "ActionVerbContainerElements" => new KeyedArrayChangelogBuilder<string>("ActionVerb"),
             "ResidentActors" or "Settings"
-                or "ShootableShareActorSettings" => new KeyedArrayChangelogBuilder<string>("Actor"),
+                or "ShootableShareActorSettings" or "GoodsList" => new KeyedArrayChangelogBuilder<string>("Actor"),
             "BindActorInfo" => new KeyedArrayChangelogBuilder<string>("ActorHolderKey"),
-            "GoodsList" => new KeyedArrayChangelogBuilder<string>("ActorName"),
             "RegisteredActorArray" or "RequirementList"
                 or "Rewards" => new KeyedArrayChangelogBuilder<string>("ActorName"),
             "SharpInfoBowList" => new KeyedArrayChangelogBuilder<uint>("ActorNameHash"),
