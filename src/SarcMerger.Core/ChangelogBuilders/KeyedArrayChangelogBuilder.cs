@@ -45,7 +45,7 @@ public class KeyedArrayChangelogBuilder<T>(string key) : IArrayChangelogBuilder 
     {
         int len = list.Count;
         for (int i = 0; i < len; i++) {
-            if (!list[i].GetMap()[key].Get<T>().Equals(element)) {
+            if (list[i].Value is not BymlMap map || !map[key].Get<T>().Equals(element)) {
                 continue;
             }
 
