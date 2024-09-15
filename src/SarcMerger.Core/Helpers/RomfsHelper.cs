@@ -66,7 +66,7 @@ public static class RomfsHelper
     public static ReadOnlySpan<char> GetBymlType(ReadOnlySpan<char> canonical, ReadOnlySpan<char> ext)
     {
         ReadOnlySpan<char> result;
-        return (result = canonical[..^ext.Length]).Length switch {
+        return (result = Path.GetExtension(canonical[..^ext.Length])).Length switch {
             <= 0 => result,
             >= 1 => result[1..] 
         };
