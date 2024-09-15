@@ -8,7 +8,7 @@ public static class TestArrayKeysScript
 {
     public static async Task Execute()
     {
-        SarcMergerModule module = new(TotkChecksums.FromFile(@"C:\Users\ArchLeaders\AppData\Local\totk\checksums.bin"));
-        await module.BuildChangelogsAsync(Totk.Config.GamePath, "output");
+        SarcChangelogBuilder builder = new(TotkChecksums.FromFile(@"C:\Users\ArchLeaders\AppData\Local\totk\checksums.bin"));
+        await builder.BuildChangelogsAsync(Totk.Config.GamePath, "output");
     }
 }
