@@ -5,9 +5,9 @@ using SarcMerger.Core.Models;
 
 namespace SarcMerger.Core.ChangelogBuilders;
 
-public class DefaultArrayChangelogBuilder : IArrayChangelogBuilder
+public class BymlArrayChangelogBuilder : IBymlArrayChangelogBuilder
 {
-    public static readonly DefaultArrayChangelogBuilder Instance = new();
+    public static readonly BymlArrayChangelogBuilder Instance = new();
     
     public bool LogChanges(ref BymlTrackingInfo info, ref Byml root, BymlArray src, BymlArray vanilla)
     {

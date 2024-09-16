@@ -4,7 +4,7 @@ using SarcMerger.Core.Models;
 
 namespace SarcMerger.Core.ChangelogBuilders;
 
-public class KeyedArrayChangelogBuilder<T>(string key) : IArrayChangelogBuilder where T : IEquatable<T>
+public class BymlKeyedArrayChangelogBuilder<T>(string key) : IBymlArrayChangelogBuilder where T : IEquatable<T>
 {
     private readonly string _key = key;
 

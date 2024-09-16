@@ -1,10 +1,10 @@
 using BymlLibrary;
 using BymlLibrary.Nodes.Containers;
 using Revrs;
-using SarcMerger.Core.ChangelogBuilders;
 using SarcMerger.Core.Models;
+using SarcMerger.Core.Services;
 
-namespace SarcMerger.Core;
+namespace SarcMerger.Core.ChangelogBuilders;
 
 public static class BymlChangelogBuilder
 {   
@@ -26,9 +26,9 @@ public static class BymlChangelogBuilder
             BymlNodeType.HashMap32 => LogMapChanges(ref info, src.GetHashMap32(), vanilla.GetHashMap32()),
             BymlNodeType.HashMap64 => LogMapChanges(ref info, src.GetHashMap64(), vanilla.GetHashMap64()),
             BymlNodeType.Array => info switch {
-                { Type: "ecocat", Level: 0 } => new KeyedArrayChangelogBuilder<string>("AreaNumber")
+                { Type: "ecocat", Level: 0 } => new BymlKeyedArrayChangelogBuilder<string>("AreaNumber")
                     .LogChanges(ref info, ref src, src.GetArray(), vanilla.GetArray()),
-                _ => DefaultArrayChangelogBuilder.Instance.LogChanges(ref info, ref src, src.GetArray(), vanilla.GetArray())
+                _ => BymlArrayChangelogBuilder.Instance.LogChanges(ref info, ref src, src.GetArray(), vanilla.GetArray())
             },
             BymlNodeType.Map => LogMapChanges(ref info, src.GetMap(), vanilla.GetMap()),
             BymlNodeType.String or

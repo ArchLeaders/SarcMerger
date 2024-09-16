@@ -2,7 +2,9 @@ using System.Runtime.CompilerServices;
 using BymlLibrary;
 using Revrs;
 using Revrs.Buffers;
+using Revrs.Extensions;
 using SarcLibrary;
+using SarcMerger.Core.ChangelogBuilders;
 using SarcMerger.Core.Helpers;
 using SarcMerger.Core.Models;
 using TotkCommon;
@@ -13,6 +15,9 @@ namespace SarcMerger.Core;
 
 public class SarcChangelogBuilder(TotkChecksums checksums)
 {
+    private const ushort BYML_MAGIC = 0x4259;
+    private const ushort BYML_MAGIC_LE = 0x5942;
+    
     private readonly TotkChecksums _checksums = checksums;
     
     /// <summary>
@@ -146,7 +151,7 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
 
         foreach ((string name, ArraySegment<byte> data) in src) {
             if (!vanilla.TryGetValue(name, out ArraySegment<byte> vanillaData)) {
-                // Custom file, take default path
+                // Custom file, use entire content
                 goto MoveContent;
             }
 
@@ -158,7 +163,7 @@ public class SarcChangelogBuilder(TotkChecksums checksums)
                 continue;
             }
 
-            if (DataHelper.IsBymlFile(data)) {
+            if (data.Count > 2 && data[..2].AsSpan().Read<ushort>() is BYML_MAGIC or BYML_MAGIC_LE) {
                 BymlTrackingInfo info = RomfsHelper.GetBymlType(name);
                 Byml changelogByml = BymlChangelogBuilder.LogChanges(
                     ref info, data, vanillaData,
